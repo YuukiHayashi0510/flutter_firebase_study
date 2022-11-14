@@ -58,6 +58,25 @@ class RoomFirestore {
   }
 
   static Stream<QuerySnapshot> fetchMessageSnapshot(String roomId) {
-    return _roomCollection.doc(roomId).collection('message').orderBy('send_time', descending: true).snapshots();
+    return _roomCollection
+        .doc(roomId)
+        .collection('message')
+        .orderBy('send_time', descending: true)
+        .snapshots();
+  }
+
+  static Future<void> sendMessage(
+      {required String roomId, required String message}) async {
+    try {
+      final _messageCollection =
+          _roomCollection.doc(roomId).collection('message');
+      await _messageCollection.add({
+        'message': message,
+        'sender_id': SharedPrefs.fetchUid(),
+        'send_time': Timestamp.now()
+      });
+    } catch (e) {
+      print("メッセージの送信に失敗===$e");
+    }
   }
 }
