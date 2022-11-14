@@ -14,22 +14,22 @@ class TopPage extends StatefulWidget {
 class _TopPageState extends State<TopPage> {
   List<User> userList = [
     User(
-        name: "Tanaka",
-        id: "abc",
-        imagePath: "https://pbs.twimg.com/media/E-hKe4WUcAcNlZA.jpg",
-        lastMessage: "hello"),
+      name: "Tanaka",
+      id: "abc",
+      imagePath: "https://pbs.twimg.com/media/E-hKe4WUcAcNlZA.jpg",
+    ),
     User(
-        name: "Anno",
-        id: "def",
-        imagePath:
-            "https://tmitter.news/wp/wp-content/uploads/2021/10/1634267023817.jpg",
-        lastMessage: "aaaa!!!"),
+      name: "Anno",
+      id: "def",
+      imagePath:
+          "https://tmitter.news/wp/wp-content/uploads/2021/10/1634267023817.jpg",
+    ),
     User(
-        name: "りんりん",
-        id: "def",
-        imagePath:
-            "https://demonition.com/wp/wp-content/uploads/2021/07/58211cf62c8da9e73c8b6b2c454c0b51.jpg",
-        lastMessage: "シエル先輩!!!"),
+      name: "りんりん",
+      id: "def",
+      imagePath:
+          "https://demonition.com/wp/wp-content/uploads/2021/07/58211cf62c8da9e73c8b6b2c454c0b51.jpg",
+    ),
   ];
 
   @override
@@ -87,7 +87,7 @@ class _TopPageState extends State<TopPage> {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          userList[index].lastMessage!,
+                          'こんにちは',
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
