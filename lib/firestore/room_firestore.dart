@@ -28,7 +28,8 @@ class RoomFirestore {
     }
   }
 
-  static Future<List<TalkRoom>?> fetchJoinedRooms(QuerySnapshot snapshot) async {
+  static Future<List<TalkRoom>?> fetchJoinedRooms(
+      QuerySnapshot snapshot) async {
     try {
       String myUid = SharedPrefs.fetchUid()!;
       List<TalkRoom> talkRooms = [];
@@ -54,5 +55,9 @@ class RoomFirestore {
       return null;
     }
     return null;
+  }
+
+  static Stream<QuerySnapshot> fetchMessageSnapshot(String roomId) {
+    return _roomCollection.doc(roomId).collection('message').orderBy('send_time', descending: true).snapshots();
   }
 }
