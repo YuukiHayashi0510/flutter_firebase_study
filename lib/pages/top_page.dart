@@ -4,8 +4,6 @@ import 'package:chat_firebase_app/pages/talk_room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../model/user.dart';
-
 class TopPage extends StatefulWidget {
   const TopPage({Key? key}) : super(key: key);
 
