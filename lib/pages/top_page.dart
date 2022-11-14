@@ -87,7 +87,7 @@ class _TopPageState extends State<TopPage> {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          userList[index].lastMessage,
+                          userList[index].lastMessage!,
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],

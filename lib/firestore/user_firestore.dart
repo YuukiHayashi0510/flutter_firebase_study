@@ -1,12 +1,15 @@
+import 'package:chat_firebase_app/firestore/room_firestore.dart';
+import 'package:chat_firebase_app/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+
+import '../utils/shared_prefs.dart';
 
 class UserFirestore {
   static final FirebaseFirestore _firebaseFirestoreInstance =
       FirebaseFirestore.instance;
   static final _userCollection = _firebaseFirestoreInstance.collection('user');
 
-  static Future<String?> createUser() async {
+  static Future<String?> insertNewAccount() async {
     try {
       final newDoc = await _userCollection.add({
         'name': 'ななし',
@@ -27,6 +30,29 @@ class UserFirestore {
       return snapshot.docs;
     } catch (e) {
       print("ユーザ情報の取得失敗===$e");
+    }
+  }
+
+  static Future<void> createUser() async {
+    final myUid = await insertNewAccount();
+    if (myUid != null) {
+      RoomFirestore.createRoom(myUid);
+      SharedPrefs.setUid(myUid);
+    }
+  }
+
+  static Future<User?> fetchMyProfile() async {
+    try {
+      String uid = SharedPrefs.fetchUid()!;
+      final myProfile = await _userCollection.doc(uid).get();
+      User user = User(
+          name: myProfile.data()!['name'],
+          imagePath: myProfile.data()!['image_path'],
+          id: uid);
+      return user;
+    } catch (e) {
+      print("自分のユーザ情報取得失敗===$e");
+      return null;
     }
   }
 }
