@@ -8,6 +8,9 @@ class RoomFirestore {
   static final FirebaseFirestore _firebaseFirestoreInstance =
       FirebaseFirestore.instance;
   static final _roomCollection = _firebaseFirestoreInstance.collection('room');
+  static final joinedRoomSnapshot = _roomCollection
+      .where('joined_user_ids', arrayContains: SharedPrefs.fetchUid()!)
+      .snapshots();
 
   static Future<void> createRoom(String myUid) async {
     try {
@@ -25,31 +28,31 @@ class RoomFirestore {
     }
   }
 
-  static Future<void> fetchJoinedRooms() async {
+  static Future<List<TalkRoom>?> fetchJoinedRooms(QuerySnapshot snapshot) async {
     try {
       String myUid = SharedPrefs.fetchUid()!;
-      final snapshot = await _roomCollection
-          .where('joined_user_ids', arrayContains: myUid)
-          .get();
       List<TalkRoom> talkRooms = [];
       for (var doc in snapshot.docs) {
-        List<dynamic> userIds = doc.data()['joined_user_ids'];
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        List<dynamic> userIds = data['joined_user_ids'];
         late String talkUserUid;
         for (var id in userIds) {
           if (id == myUid) continue;
           talkUserUid = id;
         }
         User? talkUser = await UserFirestore.fetchProfile(talkUserUid);
-        if (talkUser == null) return;
+        if (talkUser == null) return null;
         final talkRoom = TalkRoom(
             roomId: doc.id,
             talkUser: talkUser,
-            lastMessage: doc.data()['last_message']);
+            lastMessage: data['last_message']);
         talkRooms.add(talkRoom);
-        // print(talkRooms.length);
+        return talkRooms;
       }
     } catch (e) {
       print("参加しているトークルームの取得失敗===$e");
+      return null;
     }
+    return null;
   }
 }
